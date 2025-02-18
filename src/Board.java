@@ -7,7 +7,7 @@ public class Board {
         initializeBoard();
     }
 
-    private void initializeBoard() {
+    public void initializeBoard() {
         for (int i = 0; i < SIZE; i++) {
             for (int j = 0; j < SIZE; j++) {
                 grid[i][j] = Symbol.EMPTY.getValue();

@@ -1,15 +1,65 @@
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
+
 public class AIPlayer extends Player {
     private static final int WIN_SCORE = 10;
     private static final int LOSE_SCORE = -10;
     private static final int DRAW_SCORE = 0;
+    private final Difficulty difficulty;
+    private final Random random = new Random();
 
-    public AIPlayer(Symbol symbol) {
+    public AIPlayer(Symbol symbol, Difficulty difficulty) {
         super(symbol);
+        this.difficulty = difficulty;
     }
 
     @Override
     public Move getMove(Board board) {
+        switch (difficulty) {
+            case EASY:
+                return getEasyMove(board);
+            case MEDIUM:
+                return getMediumMove(board);
+            case HARD:
+                return findBestMove(board);
+            default:
+                return findBestMove(board);
+        }
+    }
+
+    private Move getEasyMove(Board board) {
+        // 70% random moves, 30% strategic moves
+        if (random.nextDouble() < 0.7) {
+            return getRandomMove(board);
+        }
         return findBestMove(board);
+    }
+
+    private Move getMediumMove(Board board) {
+        // 30% random moves, 70% strategic moves
+        if (random.nextDouble() < 0.3) {
+            return getRandomMove(board);
+        }
+        return findBestMove(board);
+    }
+
+    private Move getRandomMove(Board board) {
+        List<Move> availableMoves = new ArrayList<>();
+        char[][] grid = board.getGrid();
+        
+        for (int i = 0; i < 3; i++) {
+            for (int j = 0; j < 3; j++) {
+                if (grid[i][j] == Symbol.EMPTY.getValue()) {
+                    availableMoves.add(new Move(i, j));
+                }
+            }
+        }
+        
+        if (!availableMoves.isEmpty()) {
+            return availableMoves.get(random.nextInt(availableMoves.size()));
+        }
+        return null;
     }
 
     private Move findBestMove(Board board) {

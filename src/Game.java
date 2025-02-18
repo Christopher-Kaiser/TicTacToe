@@ -13,6 +13,13 @@ public class Game {
         this.state = GameState.IN_PROGRESS;
     }
 
+    // Add new reset method
+    public void reset() {
+        board.initializeBoard();
+        currentPlayer = playerX;
+        state = GameState.IN_PROGRESS;
+    }
+
     public void makeMove(int row, int col) {
         if (state != GameState.IN_PROGRESS || !board.isValidMove(row, col)) {
             return;
@@ -49,5 +56,9 @@ public class Game {
 
     public Board getBoard() {
         return board;
+    }
+
+    public char getWinner() {
+        return currentPlayer.getSymbol();
     }
 }
